@@ -9,23 +9,41 @@ resources:
 - repo: self
 
 variables:
+  dockerRegistryServiceConnection: 'extoDockerConnection'
+  imageRepository: 'meghanaksgowda/meghawebapp'
+  imageTag: '$(Build.BuildId)'
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: BuildAndPush
+  displayName: 'Build and Push Docker Image'
   jobs:
   - job: Build
-    displayName: Build
+    displayName: 'Build Docker Image'
     pool:
-     name: default
-      # vmImage: Azure Pipelines
+      name: default
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: 'Build an image'
       inputs:
-        command: build
+        command: 'build'
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
-          $(tag)
-        containerRegistry: extoDockerConnection
+          $(imageRepository):$(imageTag)
+
+  - job: Push
+    displayName: 'Push Docker Image to Docker Hub'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: 'Push an image'
+      inputs:
+        command: 'push'
+        repository: '$(imageRepository):$(imageTag)'
+
+
+
+
+
+
