@@ -40,6 +40,7 @@ stages:
       displayName: 'Push an image'
       inputs:
         command: 'push'
+        containerRegistry: 'extoDockerConnection' 
         repository: '$(imageRepository):$(imageTag)'
 
 
