@@ -41,7 +41,9 @@ stages:
       inputs:
         command: 'push'
         containerRegistry: 'extoDockerConnection' 
-        repository: '$(imageRepository):$(imageTag)'
+        repository: '$(imageRepository)'
+        tags: |
+          '$(imageTag)'
 
 
 
